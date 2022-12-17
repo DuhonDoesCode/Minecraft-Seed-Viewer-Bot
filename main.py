@@ -80,4 +80,4 @@ async def view(interaction: discord.Interaction, seed: str, zoom: int):
     print('saved canvas')
     await interaction.followup.send(file=discord.File("canvas.png"))
 
-bot.run('MTA1Mjc0NDkwOTg4ODY5MjI5Ng.GfWEv7.QLE1nKA3tH3gnGN5W32A86Dn0sWrtRrlCf1L38')
+bot.run('your_bot_key')
