@@ -1,1 +1,4 @@
 main.py
+testing/
+*.log
+canvas.*
