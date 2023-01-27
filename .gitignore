@@ -2,3 +2,11 @@ main.py
 testing/
 *.log
 canvas.*
+bot_DEPRECATED.py
+notes.txt
+main.py
+*.png
+!example1.png
+!example2.png
+command.txt
+MineMap.jar
