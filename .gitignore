@@ -8,6 +8,7 @@ main.py
 *.png
 !example1.png
 !example2.png
+!example3.png
 command.txt
 MineMap.jar
 cubiomes/

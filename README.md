@@ -10,6 +10,10 @@ This is an example command on the bot. After a few moments, it'll fetch the rend
 
 ![Command Result](readme/example2.png)
 
+![Stronghold and Structure finder](readme/example3.png)
+
+It also finds you a seed with a specific structure at spawn, and that seed's estimated stronghold location.
+
 # Setup
 
 If you want to run this bot yourself, great! Please start by downloading the latest version of Python and then discord.py:
