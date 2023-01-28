@@ -1,12 +1,11 @@
 #include "generator.h"
 #include <stdio.h>
 
-int main()
-{
+int find(int biome, char *biomeName, int version){
     // Set up a biome generator that reflects the biome generation of
     // Minecraft 1.18.
     Generator g;
-    setupGenerator(&g, MC_1_18, 0);
+    setupGenerator(&g, version, 0);
 
     // Seeds are internally represented as unsigned 64-bit integers.
     uint64_t seed;
@@ -19,13 +18,23 @@ int main()
         int scale = 1; // scale=1: block coordinates, scale=4: biome coordinates
         int x = 0, y = 63, z = 0;
         int biomeID = getBiomeAt(&g, scale, x, y, z);
-        if (biomeID == mushroom_fields)
+        if (biomeID == biome)
         {
-            printf("Seed %" PRId64 " has a Mushroom Fields biome at "
-                "block position (%d, %d).\n", (int64_t) seed, x, z);
+            FILE *fptr;
+            fptr = fopen(".\\tmp.txt","w");
+            fprintf(fptr, "Seed %" PRId64 " has a %s biome at "
+                "block position (%d, %d).\n", (int64_t) seed, biomeName, x, z);
+            fclose(fptr);
             break;
         }
     }
 
+    return 0;
+}
+
+int main(int argc, char** argv) {
+    int arg1 = atoi(argv[1]);
+    int arg3 = atoi(argv[3]);
+    find(arg1, argv[2], arg3);
     return 0;
 }

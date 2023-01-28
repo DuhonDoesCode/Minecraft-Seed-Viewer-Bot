@@ -22,6 +22,9 @@ If you want to run this bot yourself, great! Please start by downloading the lat
 
 Then go to https://github.com/hube12/Minemap and download the latest release (specifically the .jar) and then rename it to just **MineMap.jar**. Place it in the same folder as **bot.py**.
 
+**If not running on Windows, do the following:**
+Go to the "cubiomes files" folder inside of "release" and then follow the compilation instructions text file, since I compiled my .out's in a Windows machine they do NOT work on Linux or Mac.
+
 # Contribute
 
 Well, feel free to! If you have any questions, here's my socials so you can get in touch:

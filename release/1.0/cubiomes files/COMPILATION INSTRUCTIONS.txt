@@ -1,0 +1,1 @@
+The .out files I made only work on Windows, so if you'd like to host the bot in a Linux or Mac (why?) machine you'll need to recompile them. The files are here, so for Linux you'd need to do "make libcubiomes", then "gcc find_struct.c libcubiomes.a -fwrapv -lm -o struct.out" for example. Change "find_struct.c" for the feature you want to compile.
