@@ -1,7 +1,7 @@
 #include "generator.h"
 #include <stdio.h>
 
-int find(int biome, char *biomeName, int version){
+int find(int biome, char *biomeName, int version, int start){
     // Set up a biome generator that reflects the biome generation of
     // Minecraft 1.18.
     Generator g;
@@ -9,7 +9,7 @@ int find(int biome, char *biomeName, int version){
 
     // Seeds are internally represented as unsigned 64-bit integers.
     uint64_t seed;
-    for (seed = 0; ; seed++)
+    for (seed = start + 1; ; seed++)
     {
         // Apply the seed to the generator for the Overworld dimension.
         applySeed(&g, DIM_OVERWORLD, seed);
@@ -35,6 +35,7 @@ int find(int biome, char *biomeName, int version){
 int main(int argc, char** argv) {
     int arg1 = atoi(argv[1]);
     int arg3 = atoi(argv[3]);
-    find(arg1, argv[2], arg3);
+    int arg4 = atoi(argv[4]);
+    find(arg1, argv[2], arg3, arg4);
     return 0;
 }

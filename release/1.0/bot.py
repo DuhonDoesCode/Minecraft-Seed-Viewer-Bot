@@ -105,6 +105,8 @@ async def sync(
 async def view(interaction: discord.Interaction, seed: str, size: int, version: str, coords: str):
     await interaction.response.send_message("Wait a bit while I render it!")
     nonoVersions = ['1.18', '1.19'] # These are being rendered wrongly in MineMap for some reason.
+    coordFix = [str(int(_) - int(size/2)) for _ in coords.split()]
+    coords = " ".join(coordFix)
     if version in nonoVersions:
         await interaction.followup.send(f"Sorry, this version is not currently supported as the Map renderer tends to be wrong about it. However, you can still search for structures! For visualization I recommend https://www.chunkbase.com/apps/seed-map#{seed}")
     os.system(f"java -jar \"MineMap.jar\" --screenshot --seed {seed} --version {version} --pos {coords} --size {size}")
@@ -113,7 +115,7 @@ async def view(interaction: discord.Interaction, seed: str, size: int, version: 
 
 # Finds you a specified structure at a certain pair of coords
 @bot.tree.command()
-async def structure(interaction: discord.Interaction, version: str, structure: str):
+async def structure(interaction: discord.Interaction, version: str, structure: str, start: str="-1"):
     await interaction.response.send_message("Wait a moment while I find the structure desired!")
     if version not in versionList:
         await interaction.followup.send("I only support versions from B1.8 to 1.19 in this feature!")
@@ -121,7 +123,7 @@ async def structure(interaction: discord.Interaction, version: str, structure: s
     if structure not in structuresList:
         await interaction.followup.send("Make sure your structure is typed correctly! Options are: 'Desert Pyramid','Jungle Temple', 'Jungle Temple','Swamp Hut','Igloo','Village','Ocean Ruin','Shipwreck','Monument','Mansion','Outpost','Ruined Portal','Ancient City','Treasure','Mineshaft'")
         return
-    subprocess.call(["a.out", str(structuresList.index(structure)), structure, str(versionList.index(version))])
+    subprocess.call(["a.out", str(structuresList.index(structure)), structure, str(versionList.index(version)), str(start)])
     f = open("tmp.txt", "r")
     result = f.read()
     f.close()
@@ -142,16 +144,16 @@ async def stronghold(interaction: discord.Interaction, version: str, seed: str):
     await interaction.followup.send(result)
 
 @bot.tree.command()
-async def biome(interaction: discord.Interaction, version: str, biome: str, structure: str=None):
+async def biome(interaction: discord.Interaction, version: str, biome: str, structure: str=None, start: str="-1"):
     await interaction.response.send_message("Looking for a seed with the biome at spawn! One moment")
-    if structure not in structuresList:
+    if structure not in structuresList and structure!=None:
         await interaction.followup.send("Make sure your structure is typed correctly! Options are: 'Desert Pyramid','Jungle Temple', 'Jungle Temple','Swamp Hut','Igloo','Village','Ocean Ruin','Shipwreck','Monument','Mansion','Outpost','Ruined Portal','Ancient City','Treasure','Mineshaft'")
     if version not in versionList:
         await interaction.followup.send("I only support versions from B1.8 to 1.19 in this feature!")
     if structure != None:
-        subprocess.call(["d.out", str(biomeList[biome]), biome, str(versionList.index(version)), str(structuresList.index(structure))])
+        subprocess.call(["d.out", str(biomeList[biome]), biome, str(versionList.index(version)), str(structuresList.index(structure)), str(start)])
     else:
-        subprocess.call(["c.out", str(biomeList[biome]), biome, str(versionList.index(version))])
+        subprocess.call(["c.out", str(biomeList[biome]), biome, str(versionList.index(version)), str(start)])
         print("No structure specified.")
     if biome not in biomeList.keys():
         await interaction.followup.send("Sorry, the biome picked is not currently supported.")
@@ -175,7 +177,6 @@ async def search(interaction: discord.Interaction, version: str, seed: str, stru
     f.close()
     os.remove("tmp.txt")
     await interaction.followup.send(result)
-    
 
 @bot.tree.command()
 async def faq(interaction: discord.Interaction):

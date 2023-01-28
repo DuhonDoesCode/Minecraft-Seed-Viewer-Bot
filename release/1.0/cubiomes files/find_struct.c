@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int find(int structureInput, char *structureName, int version) {
+int find(int structureInput, char *structureName, int version, int start) {
     int structType = structureInput;
     int mc = version;
 
@@ -27,6 +27,12 @@ int find(int structureInput, char *structureName, int version) {
         for (upper16 = 0; upper16 < 0x10000; upper16++)
         {
             uint64_t seed = lower48 | (upper16 << 48);
+            printf("%d\n", seed);
+            printf("%d\n", start);
+            if(seed == start){
+                printf("%d", seed);
+                seed++;
+            }
             applySeed(&g, DIM_OVERWORLD, seed);
             if (isViableStructurePos(structType, &g, p.x, p.z, 0))
             {
@@ -44,7 +50,8 @@ int find(int structureInput, char *structureName, int version) {
 int main(int argc, char** argv) {
     int arg1 = atoi(argv[1]);
     int arg3 = atoi(argv[3]);
-    find(arg1, argv[2], arg3);
+    int arg4 = atoi(argv[4]);
+    find(arg1, argv[2], arg3, arg4);
     return 0;
 }
 

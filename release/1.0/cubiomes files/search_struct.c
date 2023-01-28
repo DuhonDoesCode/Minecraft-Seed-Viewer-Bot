@@ -1,28 +1,48 @@
 #include "finders.h"
+#include "generator.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-int find(uint64_t seed, int version, int structure, char *structureName){
-    int mc = version;
-    Pos p;
+int test(uint64_t seed, int version, int structure, char *structureName){
+    printf("bro\n");
     Generator g;
-    setupGenerator(&g, mc, 0);    
+    setupGenerator(&g, version, 0);   
+    applySeed(&g, DIM_OVERWORLD, seed); 
+    printf("bro3\n");
     int flag = 0;
-    for(int x = 0; x<=16000; x+=80){
-        for(int z = 0; z<=16000; z+=80){
-            getStructurePos(structure, mc, seed, x, z, &p);
+    int listX[8000];
+    int listZ[8000];
+    printf("bro4\n");
+    for(int x = -800; x<=800; x+=16){
+        for(int z = -800; z<=800; z+=16){
+            Pos p;
+            if(!getStructurePos(structure, version, seed, x, z, &p)){
+                continue;
+            }
+            if(!(abs(p.x - x) >= 16 || abs(p.z - z) >= 16)){
+                continue;
+            }
             if(isViableStructurePos(structure, &g, p.x, p.z, 0)){
+                listX[abs(p.x)] = 1;
+                listZ[abs(p.z)] = 1;
+                flag = 1;
+            }
+        }
+    }
+    printf("%d\n", flag);
+    for(int i = 0; i <= 1600; i++){
+        for(int j = 0; j <= 1600; j++){
+            if(listX[i] && listZ[j]){
                 FILE *fptr;
                 fptr = fopen(".\\tmp.txt","w");
-                fprintf(fptr, "Seed %" PRId64 " has the closest %s at (%d, %d).\n",
-                    (int64_t) seed, structureName, p.x, p.z);
+                fprintf(fptr, "Seed: %" PRId64 " has the closest %s at: (%d, %d)\n", (int64_t) seed, structureName, i, j);
                 fclose(fptr);
-                flag = 1;
                 return 0;
             }
         }
     }
     if(!flag){
+        printf("Well damn\n");
         FILE *fptr;
         fptr = fopen(".\\tmp.txt","w");
         fprintf(fptr, "Didn't find anything within 1000 chunks!");
@@ -36,6 +56,7 @@ int main(int argc, char** argv) {
     uint64_t arg1 = strtoull(argv[1], &end, 10);
     int arg2 = atoi(argv[2]);
     int arg3 = atoi(argv[3]);
-    find(arg1, arg2, arg3, argv[4]);
+    test(arg1, arg2, arg3, argv[4]);
+    printf("bro2\n"); // Doesn't execute? What?
     return 0;
 }
