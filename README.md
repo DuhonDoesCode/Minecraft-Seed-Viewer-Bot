@@ -1,7 +1,5 @@
 # Minecraft-Seed-Viewer-Bot
 
-!!! This bot is currently being developed in the early stages and thus is not very useful. !!!
-
 # Examples
 
 ![Command Example](readme/example1.png)
