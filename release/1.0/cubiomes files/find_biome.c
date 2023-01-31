@@ -1,5 +1,6 @@
 #include "generator.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 int find(int biome, char *biomeName, int version, int start){
     // Set up a biome generator that reflects the biome generation of
@@ -18,6 +19,8 @@ int find(int biome, char *biomeName, int version, int start){
         int scale = 1; // scale=1: block coordinates, scale=4: biome coordinates
         int x = 0, y = 63, z = 0;
         int biomeID = getBiomeAt(&g, scale, x, y, z);
+        
+        //printf("%" PRId64 "\n", seed);
         if (biomeID == biome)
         {
             FILE *fptr;

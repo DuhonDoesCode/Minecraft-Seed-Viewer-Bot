@@ -1,1 +1,1 @@
-Seed: 489 has the closest Village at: (-464, 304)
+Seed 1481 has a Mush biome at block position (0, 0).
