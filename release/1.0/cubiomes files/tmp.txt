@@ -1,1 +1,0 @@
-Seed 1481 has a Mush biome at block position (0, 0).

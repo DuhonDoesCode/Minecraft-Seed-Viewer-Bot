@@ -103,7 +103,7 @@ async def sync(
     await ctx.send(f"Synced the tree to {ret}/{len(guilds)}.")
 
 @bot.tree.command()
-async def view(interaction: discord.Interaction, seed: str, size: int, version: str, coords: str):
+async def view(interaction: discord.Interaction, seed: int, size: int, version: str, coords: str):
     await interaction.response.send_message("Wait a bit while I render it!")
     nonoVersions = ['1.18', '1.19'] # These are being rendered wrongly in MineMap for some reason.
     coordFix = [str(int(_) - int(size/2)) for _ in coords.split()]
@@ -111,8 +111,8 @@ async def view(interaction: discord.Interaction, seed: str, size: int, version: 
     if version in nonoVersions:
         await interaction.followup.send(f"Sorry, this version is not currently supported as the Map renderer tends to be wrong about it. However, you can still search for structures! For visualization I recommend https://www.chunkbase.com/apps/seed-map#{seed}")
         return
-    await asyncio.create_subprocess_shell(f"java -jar \"MineMap.jar\" --screenshot --seed {seed} --version {version} --pos {coords} --size {size}")
-    await asyncio.sleep(7)
+    proc = await asyncio.create_subprocess_shell(f"java -jar \"MineMap.jar\" --screenshot --seed {seed} --version {version} --pos {coords} --size {size}")
+    await proc.wait()
     file = discord.File(f"{seed}.png")
     await interaction.followup.send(f"Here's the render of the seed {seed}", file=file)
 
@@ -126,8 +126,8 @@ async def structure(interaction: discord.Interaction, version: str, structure: s
     if structure not in structuresList:
         await interaction.followup.send("Make sure your structure is typed correctly! Options are: 'Desert Pyramid','Jungle Temple', 'Jungle Temple','Swamp Hut','Igloo','Village','Ocean Ruin','Shipwreck','Monument','Mansion','Outpost','Ruined Portal','Ancient City','Treasure','Mineshaft'")
         return
-    await asyncio.create_subprocess_shell(f"a.out {str(structuresList.index(structure))} {structure} {str(versionList.index(version))} {str(start)}")
-    await asyncio.sleep(1)
+    proc = await asyncio.create_subprocess_shell(f"a.out {str(structuresList.index(structure))} {structure} {str(versionList.index(version))} {str(start)}")
+    await proc.wait()
     f = open("tmp.txt", "r")
     result = f.read()
     f.close()
@@ -135,13 +135,13 @@ async def structure(interaction: discord.Interaction, version: str, structure: s
     await interaction.followup.send(result)
 
 @bot.tree.command()
-async def stronghold(interaction: discord.Interaction, version: str, seed: str):
+async def stronghold(interaction: discord.Interaction, version: str, seed: int):
     await interaction.response.send_message("Wait a moment while I find the stronghold!")
     if version not in versionList:
         await interaction.followup.send("I only support versions from B1.8 to 1.19 in this feature!")
         return
-    await asyncio.create_subprocess_shell(f"b.out {str(seed)} {str(versionList.index(version))}")
-    await asyncio.sleep(1)
+    proc = await asyncio.create_subprocess_shell(f"b.out {str(seed)} {str(versionList.index(version))}")
+    await proc.wait()
     f = open("tmp.txt", "r")
     result = f.read()
     f.close()
@@ -161,11 +161,11 @@ async def biome(interaction: discord.Interaction, version: str, biome: str, stru
         await interaction.followup.send("I only support versions from B1.8 to 1.19 in this feature!")
         return
     if structure != None:
-        await asyncio.create_subprocess_shell(f"d.out {str(biomeList[biome])} {biome} {str(versionList.index(version))} {str(structuresList.index(structure))} {str(start)}")
-        await asyncio.sleep(1)
+        proc = await asyncio.create_subprocess_shell(f"d.out {str(biomeList[biome])} {biome} {str(versionList.index(version))} {str(structuresList.index(structure))} {str(start)}")
+        await proc.wait()
     else:
-        await asyncio.create_subprocess_shell(f"c.out {str(biomeList[biome])} {biome} {str(versionList.index(version))} {str(start)}")
-        await asyncio.sleep(1)
+        proc = await asyncio.create_subprocess_shell(f"c.out {str(biomeList[biome])} {biome} {str(versionList.index(version))} {str(start)}")
+        await proc.wait()
         print("No structure specified.")  
     f = open("tmp.txt", "r")
     result = f.read()
@@ -174,7 +174,7 @@ async def biome(interaction: discord.Interaction, version: str, biome: str, stru
     await interaction.followup.send(result)
 
 @bot.tree.command()
-async def search(interaction: discord.Interaction, version: str, seed: str, structure: str):
+async def search(interaction: discord.Interaction, version: str, seed: int, structure: str):
     await interaction.response.send_message("Looking for the structure! Wait a bit.")
     if structure not in structuresList:
         await interaction.followup.send("Make sure your structure is typed correctly! Options are: 'Desert Pyramid','Jungle Temple', 'Jungle Temple','Swamp Hut','Igloo','Village','Ocean Ruin','Shipwreck','Monument','Mansion','Outpost','Ruined Portal','Ancient City','Treasure','Mineshaft'")
@@ -182,8 +182,8 @@ async def search(interaction: discord.Interaction, version: str, seed: str, stru
     if version not in versionList:
         await interaction.followup.send("I only support versions from B1.8 to 1.19 in this feature!")
         return
-    await asyncio.create_subprocess_shell(f"e.out {str(seed)} {str(versionList.index(version))} {str(structuresList.index(structure))} {structure}")
-    await asyncio.sleep(1)
+    proc = await asyncio.create_subprocess_shell(f"e.out {str(seed)} {str(versionList.index(version))} {str(structuresList.index(structure))} {structure}")
+    await proc.wait()
     f = open("tmp.txt", "r")
     result = f.read()
     f.close()
